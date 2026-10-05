@@ -5,8 +5,12 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("dev.flutter.flutter-gradle-plugin")
-    id("com.google.gms.google-services")
+    id("com.google.gms.google-services") apply false
     id("com.google.firebase.crashlytics")
+}
+
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
 }
 
 val localProperties = Properties().apply {
@@ -82,6 +86,7 @@ android {
             )
 
             configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = hasReleaseSigning
                 nativeSymbolUploadEnabled = hasReleaseSigning
             }
         }
